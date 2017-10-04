@@ -1,8 +1,6 @@
 var http = require('http');
 
-//http://localhost:34083
-const HOST = 'localhost';
-const PORT = 34083;
+const HOST = 'http://theconsidition.se';
 
 var _apikey;
 var _silent = false;
@@ -41,7 +39,6 @@ function handleResponseData(data) {
 function get(path, callback) {
 	var options = {
 		host: HOST,
-		port: PORT,
 		path: '/' + path,
 		method: 'GET',
 		headers: {
@@ -68,7 +65,6 @@ function get(path, callback) {
 function post(path, data, callback) {
 	var options = {
 		host: HOST,
-		port: PORT,
 		path: '/' + path,
 		method: 'POST',
 		headers: {
