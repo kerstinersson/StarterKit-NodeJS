@@ -1,7 +1,7 @@
 const api = require('./api');
 
 // TODO: Enter your API key
-const API_KEY = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX';
+const API_KEY = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXX';
 
 function solve(game) {
 	/*
@@ -33,6 +33,8 @@ function solve(game) {
 
 function main() {
 	api.initGame(getGame);
+	//Or get by gameId
+	//api.getGame(936, afterGetGame);
 }
 
 function getGame() {

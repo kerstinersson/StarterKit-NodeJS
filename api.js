@@ -1,6 +1,6 @@
 var http = require('http');
 
-const HOST = 'http://theconsidition.se';
+const HOST = 'theconsidition.se';
 
 var _apikey;
 var _silent = false;
@@ -119,7 +119,7 @@ module.exports = {
 	},
 	
 	getGame: function(gameStateId, callback) {
-		get('considition/getgame', function(result) {
+		get('considition/getgame?gameStateId=' + gameStateId, function(result) {
 			log('Retrieved game with ID ' + result.gameState.id);
 			callback(result.gameState);
 		});
