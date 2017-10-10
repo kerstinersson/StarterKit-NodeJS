@@ -1,7 +1,7 @@
 const api = require('./api');
 
 // TODO: Enter your API key
-const API_KEY = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXX';
+const API_KEY = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX';
 
 function solve(game) {
 	/*
