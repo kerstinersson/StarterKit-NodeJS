@@ -1,7 +1,7 @@
 const api = require('./api');
 
 // TODO: Enter your API key
-const API_KEY = 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX';
+const API_KEY = 'a075f264-6dbc-4504-a730-23632f9fa0f8';
 
 function solve(game) {
 	/*
@@ -18,7 +18,7 @@ function solve(game) {
 	var x = game.start.x;
 	var y = game.start.y;
 
-	solution.push(SET_PRIMARY_TRANSPORTATION [BIKE])
+	solution.push("SET_PRIMARY_TRANSPORTATION BIKE")
 
 	while (x < game.end.x)
 	{
