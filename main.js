@@ -24,12 +24,32 @@ function solve(game) {
 
 	var citiesToVisit = getCitiesToVisit(game);
 
-	//console.log(citiesToVisit);
+	while (citiesToVisit.length > 0) {
+		var nextCity = getClosestCity(game, citiesToVisit, x, y);
+		nextX = getCityX(game, nextCity);
+		nextY = getCityY(game, nextCity);
 
-	var nextCity = getClosestCity(game, citiesToVisit, x, y);
+		solution = moveToXY(solution, x, y, nextX, nextY); 
+		x = nextX;
+		y = nextY;
+		console.log(x);
+		console.log(y);
+		var remove = citiesToVisit.indexOf(nextCity);
+		citiesToVisit.splice(remove, 1);
+	}
 
-	console.log(nextCity);
+	solution = moveToXY(solution, x, y, game.end.x, game.end.y);
 
+	//console.log(x);
+	//console.log(y);
+
+	x = game.end.x;
+	y = game.end.y;
+
+	console.log(x);
+	console.log(y);
+
+	/*
 	while (x < game.end.x)
 	{
 		x++;
@@ -40,6 +60,7 @@ function solve(game) {
 		y++;
 		solution.push("TRAVEL SOUTH");
 	}
+	*/
 
 	return solution;
 }
@@ -133,7 +154,7 @@ function getCityY(game, cityname) {
 // Move to coordinates
 function moveToXY(solution, x, y, destX, destY) {
     console.log("entered moveToXY");
-    while (x != destX, y != destY) {
+    while (x != destX || y != destY) {
         if (x < destX) {
             x++;
             solution.push("TRAVEL EAST");
@@ -149,6 +170,7 @@ function moveToXY(solution, x, y, destX, destY) {
             solution.push("TRAVEL NORTH");
         }
     }
+    console.log(x, y);
     return solution;
 }
 
