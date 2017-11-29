@@ -22,8 +22,42 @@ function solve(game) {
 
 	var visitedCities = [];
 
+	var trainTask = false;
+
 	var citiesToVisit = getCitiesToVisit(game);
 
+	// nearby_land
+    while (true) {
+        if (game.map[x][y] == "W") {
+            printArea(game, x, y);
+            break;
+        }
+        solution.push("TRAVEL EAST");
+        x++;
+    }
+    var waterSteps = 0;
+    while (true) {
+        if (waterSteps > 200) { // BYT UT 200 MOT KRAV (x) FÖR nearby_land!
+            break;
+        }
+        solution.push("TRAVEL EAST");
+        x++;
+        solution.push("TRAVEL NORTH");
+        y--;
+        solution.push("TRAVEL WEST");
+        x--;
+        solution.push("TRAVEL SOUTH");
+        y++;
+        waterSteps += 4;
+    }
+
+    var destX = 1, destY = 1;
+    
+    solution = moveToXY(solution, x, y, destX, destY);
+    x = destX;
+    y = destY;
+
+	// Visit all Consid cities
 	while (citiesToVisit.length > 0) {
 		var nextCity = getClosestCity(game, citiesToVisit, x, y);
 		nextX = getCityX(game, nextCity);
@@ -32,22 +66,79 @@ function solve(game) {
 		solution = moveToXY(solution, x, y, nextX, nextY); 
 		x = nextX;
 		y = nextY;
-		console.log(x);
-		console.log(y);
+
 		var remove = citiesToVisit.indexOf(nextCity);
+		visitedCities.push(citiesToVisit[remove]);
+		citiesToVisit.splice(remove, 1);
+
+		if (!trainTask) {
+
+			for (var i in citiesToVisit) {
+				var conn = checkTRTrain(game, nextCity, citiesToVisit[i]);
+
+				if (conn) { // CHANGE TO CONDITION FOR TRAIN BOTH WAYS
+	            	var trainOrigin = "TRAIN " + nextCity;
+	            	var trainDest = "TRAIN " + citiesToVisit[i]; // CHANGE ACCORDING TO CONDITION
+	            	trainTask = true;
+	            	solution.push(trainDest);
+	            	solution.push(trainOrigin);
+
+	            	break;
+        		}
+			}
+
+		}
+	}
+
+	// Return to city
+	citiesToVisit = getCitiesToVisit(game);
+	nextCity = getClosestCity(game, citiesToVisit, x, y);
+	nextX = getCityX(game, nextCity);
+	nextY = getCityY(game, nextCity);
+
+	solution = moveToXY(solution, x, y, nextX, nextY); 
+
+	x = nextX;
+	y = nextY;
+
+	// Travel far from nearest city
+	var km = getKMsToTravel(game);
+	nextX = x + km;
+	solution = moveToXY(solution, x, y, nextX, y);
+	x = nextX;
+
+	// Visit many cities
+	citiesToVisit = getAllCities(game);
+
+	// remove visited cities
+	var goalNum = getNumCities(game);
+
+	if (citiesToVisit.length < goalNum) {
+		console.log("Visit more cities!");
+		console.log(goalNum);
+	}
+
+	for (var i = 0; i < visitedCities.length; i++) {
+		var remove = citiesToVisit.indexOf(visitedCities[i]);
 		citiesToVisit.splice(remove, 1);
 	}
 
+	while (visitedCities.length < goalNum && citiesToVisit.length > 0) {
+		var nextCity = getClosestCity(game, citiesToVisit, x, y);
+		nextX = getCityX(game, nextCity);
+		nextY = getCityY(game, nextCity);
+
+		solution = moveToXY(solution, x, y, nextX, nextY); 
+		x = nextX;
+		y = nextY;
+
+		var remove = citiesToVisit.indexOf(nextCity);
+		visitedCities.push(citiesToVisit[remove]);
+		citiesToVisit.splice(remove, 1);
+	}
+
+	// Go to goal
 	solution = moveToXY(solution, x, y, game.end.x, game.end.y);
-
-	//console.log(x);
-	//console.log(y);
-
-	x = game.end.x;
-	y = game.end.y;
-
-	console.log(x);
-	console.log(y);
 
 	/*
 	while (x < game.end.x)
@@ -93,6 +184,40 @@ function getCitiesToVisit(game) {
 	}
 
 	return citiesToVisit;
+}
+
+function getAllCities(game) {
+	all = [];
+
+	for (var i in game.cities) {
+		all.push(game.cities[i].name);
+	}
+
+	return all;
+}
+
+function getNumCities(game) {
+	for (var o in game.objectives) {
+		if (game.objectives[o].type == "visit_many_cities") {
+			return game.objectives[o].x;
+		}
+	}
+}
+
+function getKMsToTravel(game) {
+	for (var o in game.objectives) {
+		if (game.objectives[o].type == "far_from_city") {
+			return game.objectives[o].x;
+		}
+	}
+
+	return -1;
+}
+
+function printArea(game, x, y) {
+    console.log(game.map[x-1][y-1], game.map[x][y-1], game.map[x+1][y]);
+    console.log(game.map[x-1][y], game.map[x][y], game.map[x+1][y]);
+    console.log(game.map[x-1][y+1], game.map[x][y+1], game.map[x+1][y+1]);
 }
 
 function getClosestCity(game, citiesToVisit, xPos, yPos) {
@@ -149,6 +274,35 @@ function getCityY(game, cityname) {
         }
     }
     return -1;
+}
+
+function checkTRTrain(game, cityFrom, cityTo) {
+	var to = false;
+	var from = false;
+
+	var dest = [];
+	for (var c in game.cities) {
+        if (game.cities[c].name == cityFrom) {
+            var index = game.cities[c].hasTrainTo.indexOf(cityTo);
+        }
+    }
+
+    if (index != -1) {
+    	to = true;
+    }
+
+    for (var c in game.cities) {
+        if (game.cities[c].name == cityTo) {
+            var index = game.cities[c].hasTrainTo.indexOf(cityFrom);
+        }
+    }
+
+    if (index != -1) {
+    	from = true;
+    }
+
+    return (to && from);
+
 }
 
 // Move to coordinates
