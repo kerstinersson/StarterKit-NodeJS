@@ -24,7 +24,11 @@ function solve(game) {
 
 	var citiesToVisit = getCitiesToVisit(game);
 
-	console.log(citiesToVisit);
+	//console.log(citiesToVisit);
+
+	var nextCity = getClosestCity(game, citiesToVisit, x, y);
+
+	console.log(nextCity);
 
 	while (x < game.end.x)
 	{
@@ -70,25 +74,49 @@ function getCitiesToVisit(game) {
 	return citiesToVisit;
 }
 
-function getClosestCity(citiesToVisit, xPos, yPos) {
-	var closestCity;
-	//closestCity.name = "NONE";
-	//closestCity.dist = 0;
+function getClosestCity(game, citiesToVisit, xPos, yPos) {
+	var closestCity = [];
+	closestCity.name = "NONE";
+	closestCity.dist = 1500;
+	var currentPos = [];
 
-	for (var city in citiesToVisit) {
+	currentPos.x = xPos;
+	currentPos.y = yPos;
+
+	for (var city in citiesToVisit) {	
+		//console.log(citiesToVisit[city]);
+		var dist = getDistanceToCity(game, currentPos, citiesToVisit[city])
+
+		//console.log(dist);
+
+		if (dist < closestCity.dist) {
+			closestCity.name = citiesToVisit[city];
+			closestCity.dist = dist; 
+		}
 
 	}
 
-	return 0;
+	return closestCity.name;
+}
+
+function getDistanceToCity(game, currentPos, city) {
+	//console.log(city);
+	cX = getCityX(game, city);
+	cY = getCityY(game, city);
+
+	return Math.abs(cX - currentPos.x) + Math.abs(cY - currentPos.y);;
 }
 
 // Get x coordinate of city
 function getCityX(game, cityname) {
+	//console.log(cityname);
+
     for (var c in game.cities) {
         if (game.cities[c].name == cityname) {
             return game.cities[c].x;
-        }
+        } 
     }
+
     return -1;
 }
 
