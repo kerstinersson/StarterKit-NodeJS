@@ -137,6 +137,7 @@ function solve(game) {
 		citiesToVisit.splice(remove, 1);
 	}
 
+
 	// Go to goal
 	solution = moveToXY(solution, x, y, game.end.x, game.end.y);
 
@@ -208,6 +209,26 @@ function getKMsToTravel(game) {
 	for (var o in game.objectives) {
 		if (game.objectives[o].type == "far_from_city") {
 			return game.objectives[o].x;
+		}
+	}
+
+	return -1;
+}
+
+function getCurvyX(game) {
+	for (var o in game.objectives) {
+		if (game.objectives[o].type == "curvy_road") {
+			return game.objectives[o].x;
+		}
+	}
+
+	return -1;
+}
+
+function getCurvyY(game) {
+	for (var o in game.objectives) {
+		if (game.objectives[o].type == "curvy_road") {
+			return game.objectives[o].y;
 		}
 	}
 
