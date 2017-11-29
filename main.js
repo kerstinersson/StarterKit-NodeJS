@@ -17,6 +17,9 @@ function solve(game) {
 	var solution = [];
 	var x = game.start.x;
 	var y = game.start.y;
+
+	solution.push(SET_PRIMARY_TRANSPORTATION [BIKE])
+
 	while (x < game.end.x)
 	{
 		x++;
