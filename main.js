@@ -82,5 +82,25 @@ function getClosestCity(citiesToVisit, xPos, yPos) {
 	return 0;
 }
 
+// Get x coordinate of city
+function getCityX(game, cityname) {
+    for (var c in game.cities) {
+        if (game.cities[c].name == cityname) {
+            return game.cities[c].x;
+        }
+    }
+    return -1;
+}
+
+// Get y coordinate of city
+function getCityY(game, cityname) {
+    for (var c in game.cities) {
+        if (game.cities[c].name == cityname) {
+            return game.cities[c].y;
+        }
+    }
+    return -1;
+}
+
 api.setApiKey(API_KEY);
 main();
