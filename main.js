@@ -20,6 +20,12 @@ function solve(game) {
 
 	solution.push("SET_PRIMARY_TRANSPORTATION BIKE")
 
+	var visitedCities = [];
+
+	var citiesToVisit = getCitiesToVisit(game);
+
+	console.log(citiesToVisit);
+
 	while (x < game.end.x)
 	{
 		x++;
@@ -50,6 +56,30 @@ function afterGetGame(game) {
 }
 
 function afterSubmitSolution(points) {
+}
+
+function getCitiesToVisit(game) {
+	citiesToVisit = [];
+
+	for (var o in game.objectives) {
+		if (game.objectives[o].type == "visit_city") {
+			citiesToVisit.push(game.objectives[o].x);
+		}
+	}
+
+	return citiesToVisit;
+}
+
+function getClosestCity(citiesToVisit, xPos, yPos) {
+	var closestCity;
+	//closestCity.name = "NONE";
+	//closestCity.dist = 0;
+
+	for (var city in citiesToVisit) {
+
+	}
+
+	return 0;
 }
 
 api.setApiKey(API_KEY);
