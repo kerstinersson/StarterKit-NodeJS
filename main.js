@@ -130,5 +130,27 @@ function getCityY(game, cityname) {
     return -1;
 }
 
+// Move to coordinates
+function moveToXY(solution, x, y, destX, destY) {
+    console.log("entered moveToXY");
+    while (x != destX, y != destY) {
+        if (x < destX) {
+            x++;
+            solution.push("TRAVEL EAST");
+        } else if (x > destX) {
+            x--;
+            solution.push("TRAVEL WEST");
+        }
+        if  (y < destY) {
+            y++;
+            solution.push("TRAVEL SOUTH");
+        } else if (y > destY) {
+            y--;
+            solution.push("TRAVEL NORTH");
+        }
+    }
+    return solution;
+}
+
 api.setApiKey(API_KEY);
 main();
